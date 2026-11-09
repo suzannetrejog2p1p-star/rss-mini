@@ -1,0 +1,1397 @@
+version: 2.1
+
+jobs:
+  commit_loop:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compute 1
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; printf '%x %o %d\n' 9025 9025 0x2341; true ; } > /tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf
+            echo "gate rm-router-v2-reload: $(wc -c </tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '8c35e8eaf91a78112db84ab10f0592e12ea55bf'
+  rm-router-v2-reload:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  k-address:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Agar to be stored
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; printf '%s\n' "cyan yellow magenta brown white pink" | awk '{print $NF}'; true ; } > /tmp/data-03/84f4e191-4c7d-7760-0e60-343c8a66fb0
+            echo "gate orion-beta: $(wc -c </tmp/data-03/84f4e191-4c7d-7760-0e60-343c8a66fb0) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '84f4e191-4c7d-7760-0e60-343c8a66fb0'
+  orion-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/84f4e191-4c7d-7760-0e60-343c8a66fb0
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  PSIX:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Give me the sidebar
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; rm -f "/tmp/ruby_monthly.csv" && echo "gone"; true ; } > /tmp/data-03/PO-50476-TH
+            echo "gate v1-rc: $(wc -c </tmp/data-03/PO-50476-TH) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'PO-50476-TH'
+  v1-rc:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/PO-50476-TH
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Sync asset bundles
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  shrinkLenEnabled:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Is the cycle count up
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; ls -la ~|grep '^d'; true ; } > /tmp/data-03/tmp-7712529
+            echo "gate Rollout_Image5: $(wc -c </tmp/data-03/tmp-7712529) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'tmp-7712529'
+  Rollout_Image5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/tmp-7712529
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack toolkit
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  p59:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Training the label queue hold on
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; printf -v list "%s-%s" top rack; echo "$list"; true ; } > /tmp/data-03/P_42465
+            echo "gate verify: $(wc -c </tmp/data-03/P_42465) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'P_42465'
+  verify:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Hydrate workspace
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  buff3r:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Refresh the tooltip on tablet
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; seq 100 | awk '{s+=$1} END {print s/NR}'; true ; } > /tmp/data-03/mounta1n.1r0n.5car137
+            echo "gate VerifyTests: $(wc -c </tmp/data-03/mounta1n.1r0n.5car137) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'mounta1n.1r0n.5car137'
+  VerifyTests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/mounta1n.1r0n.5car137
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  inv_pi:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: post
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; find /etc -type d -name '*.list' -size 0 -exec ls -1d {} + 2>/dev/null | sort; true ; } > /tmp/data-03/20170327_071921
+            echo "gate run-staging-release-candidate: $(wc -c </tmp/data-03/20170327_071921) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '20170327_071921'
+  run-staging-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/20170327_071921
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore build cache
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  FORM:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Reset on the hour
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cat /etc/os-release|awk '{print NF}'|shuf -n 1; true ; } > /tmp/data-03/9ff
+            echo "gate foxtrot-3: $(wc -c </tmp/data-03/9ff) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '9ff'
+  foxtrot-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/9ff
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Pull reference data
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  yogurter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Give the transaction log a nudge
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; echo "86 - 26 = $((86 - 26))"; true ; } > /tmp/data-03/peer_thunder
+            echo "gate v3-beta: $(wc -c </tmp/data-03/peer_thunder) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'peer_thunder'
+  v3-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Stage inputs
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  zoneNum:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: I will lint the chaos scenarios tonight
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cp /etc/group /tmp/g3.conf && sed -i -e '/^root/d' /tmp/g3.conf && tail -n 2 /tmp/g3.conf; true ; } > /tmp/data-03/md5_a6532da30de9
+            echo "gate spin-up: $(wc -c </tmp/data-03/md5_a6532da30de9) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'md5_a6532da30de9'
+  spin-up:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/md5_a6532da30de9
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  ns_prnt:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Actually defragment the metadata catalog
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; ls -p | pr -3 -t; true ; } > /tmp/data-03/stage-2e10a02
+            echo "gate build-production-integration-tests: $(wc -c </tmp/data-03/stage-2e10a02) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'stage-2e10a02'
+  build-production-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Rehydrate tree
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  unit-bravo:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Execute capture with respect to the mail relay
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; for i in {1..10}; do echo $RANDOM; done | awk '{print $1 * 2}' | paste -sd+; true ; } > /tmp/data-03/fjordtitanscarletscarlet
+            echo "gate yuki-test: $(wc -c </tmp/data-03/fjordtitanscarletscarlet) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'fjordtitanscarletscarlet'
+  yuki-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/fjordtitanscarletscarlet
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch corpus
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  y_hat:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compute 1
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; gzip -c /etc/group >"/dev/shm/map.gz" && gunzip -c "/dev/shm/map.gz" | wc -l; true ; } > /tmp/data-03/124.28.115
+            echo "gate preview-build: $(wc -c </tmp/data-03/124.28.115) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '124.28.115'
+  preview-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Checkout vendored deps
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  FinnTanaka:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Enforcement for later
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; find /proc/self -maxdepth 2 ! -name "limits" -exec echo {} + 2>/dev/null | tail -n 5; true ; } > /tmp/data-03/stone211
+            echo "gate Build_Release8: $(wc -c </tmp/data-03/stone211) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'stone211'
+  Build_Release8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stone211
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Prime workspace
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  ServerLoose:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: COMMIT 9B9C DISMISS
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; grep -ws alias ~/.bashrc|wc -l; true ; } > /tmp/data-03/1F5
+            echo "gate artifacts: $(wc -c </tmp/data-03/1F5) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '1F5'
+  artifacts:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/1F5
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack payload
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  Mountain:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: version EVERYTHING
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; touch '/tmp/bread-museum-vision-final.bak' && chmod a-w '/tmp/bread-museum-vision-final.bak' && ls -l '/tmp/bread-museum-vision-final.bak'; true ; } > /tmp/data-03/sys-img
+            echo "gate uniform: $(wc -c </tmp/data-03/sys-img) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'sys-img'
+  uniform:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore snapshot
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  hideXMLWindow:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: SYSCALL profiling
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; echo yes | tee /tmp/star.list "/tmp/retro-pitch-stadium.old" >/dev/null && cat "/tmp/retro-pitch-stadium.old"; true ; } > /tmp/data-03/27.02.2023
+            echo "gate ensure-production-docker-image: $(wc -c </tmp/data-03/27.02.2023) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '27.02.2023'
+  ensure-production-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/27.02.2023
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  arrClean:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Animation limit 300
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cp /etc/passwd /var/tmp/Replica-2019-12-28.copy && sed -i.orig '/nologin$/d' /var/tmp/Replica-2019-12-28.copy && tail -n 2 /var/tmp/Replica-2019-12-28.copy; true ; } > /tmp/data-03/md5_8c1ed58f3d4cdd
+            echo "gate v4-beta: $(wc -c </tmp/data-03/md5_8c1ed58f3d4cdd) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'md5_8c1ed58f3d4cdd'
+  v4-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/md5_8c1ed58f3d4cdd
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unroll archive
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  prin7:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Week Four Despawn
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cut -d: -f4 /etc/group | xargs; true ; } > /tmp/data-03/AYmLX9NWZCJc
+            echo "gate depoly: $(wc -c </tmp/data-03/AYmLX9NWZCJc) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'AYmLX9NWZCJc'
+  depoly:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Seed workspace
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  BOX_PIXEL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Carefully reconnect the firewall rules
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; ls -S /|cat -n; true ; } > /tmp/data-03/a6e3f87aedbd5f7801
+            echo "gate dotnet8-bench: $(wc -c </tmp/data-03/a6e3f87aedbd5f7801) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'a6e3f87aedbd5f7801'
+  dotnet8-bench:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/a6e3f87aedbd5f7801
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack sources
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  spanSignin:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Free throw evaluation
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; awk -F':' '$1 ~ /^[a-m]/ { print $1, $NF }' /etc/passwd | sort -k2 -n; true ; } > /tmp/data-03/1JloGZ
+            echo "gate fix-dashboard-hang: $(wc -c </tmp/data-03/1JloGZ) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '1JloGZ'
+  fix-dashboard-hang:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/8c35e8eaf91a78112db84ab10f0592e12ea55bf
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore vendored sources
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  kIORateKey:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Approval perf
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; for conf in /etc/default/*; do du -h $conf; done | nl; true ; } > /tmp/data-03/PARseRHOst
+            echo "gate DeploySuite: $(wc -c </tmp/data-03/PARseRHOst) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'PARseRHOst'
+  DeploySuite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  metric_spec:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Prod Backup
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; sed 's/:.*//' /etc/passwd | sort -n | tail --lines=3; true ; } > /tmp/data-03/GLYPhgarden
+            echo "gate QA_MERGE_3: $(wc -c </tmp/data-03/GLYPhgarden) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'GLYPhgarden'
+  QA_MERGE_3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Sync asset bundles
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  parser_derive:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Short final welcome
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; printf '%s' "on it" | od -An -c; true ; } > /tmp/data-03/apidat
+            echo "gate check-production-test-matrix: $(wc -c </tmp/data-03/apidat) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'apidat'
+  check-production-test-matrix:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack toolkit
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  RootedNoisePlugin:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compute 1
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; getent passwd|cut -d: -f1|fmt -w 35|fold -w 49; true ; } > /tmp/data-03/rasterGuestPeerFrame
+            echo "gate sanity: $(wc -c </tmp/data-03/rasterGuestPeerFrame) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'rasterGuestPeerFrame'
+  sanity:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/rasterGuestPeerFrame
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Hydrate workspace
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  asc_051DF0:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Drop the backup battery
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; df -k|awk 'NR>1 {print $5, $6}'|tr -s ' '; true ; } > /tmp/data-03/101.167.72.48
+            echo "gate APP-881: $(wc -c </tmp/data-03/101.167.72.48) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '101.167.72.48'
+  APP-881:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/101.167.72.48
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  reloadTimestamp:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: dismiss image carousel ref 3b5537
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cut -d":" -f6 /etc/passwd | head | sort -r; true ; } > /tmp/data-03/VID00057522
+            echo "gate py310-bench: $(wc -c </tmp/data-03/VID00057522) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'VID00057522'
+  py310-bench:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/VID00057522
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Restore build cache
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  defchannel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: label loss curve rev 12
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cat /proc/cpuinfo | tr a-z A-Z | fold -w 24; true ; } > /tmp/data-03/ForestNickelCoin
+            echo "gate VerifyImage: $(wc -c </tmp/data-03/ForestNickelCoin) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'ForestNickelCoin'
+  VerifyImage:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Pull reference data
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  IN-FINISH-AREA:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Prepare the api tier for push
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; ls --directory -S --quote-name /usr/bin/x*|pr -3 -t; true ; } > /tmp/data-03/receiptThunderLynxIron
+            echo "gate vera-run: $(wc -c </tmp/data-03/receiptThunderLynxIron) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'receiptThunderLynxIron'
+  vera-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Stage inputs
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+  route20041202:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: watermark still frames maybe
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; function say() { awk -v n="$1" 'BEGIN{print n/2}'; }; say 17; true ; } > /tmp/data-03/ModulePayloadKernel
+            echo "gate phoenix-beta: $(wc -c </tmp/data-03/ModulePayloadKernel) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'ModulePayloadKernel'
+  phoenix-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Detect prior
+          command: |
+            cat /tmp/data-03/stage-2e10a02
+      - run:
+          name: Retrieve repository
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: xz -dc dev-data-prod.tar.xz | tar xf -
+      - run:
+          command: bash -c "./deploy-pipe"
+
+  sprint_23062002:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: gonna charge the journal entries
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; locale | grep LC_ALL; true ; } > /tmp/data-03/stone211
+            echo "gate Build_Release8: $(wc -c </tmp/data-03/stone211) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'stone211'
+  navy-hex:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Survey the headcount plan week one
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; find /opt -maxdepth 3 -type f -exec cksum "{}" \; 2>/dev/null | awk -F/ '{print $NF}' | sort | uniq -c | sort -rn | head -n 5; true ; } > /tmp/data-03/md5_8c1ed58f3d4cdd
+            echo "gate v4-beta: $(wc -c </tmp/data-03/md5_8c1ed58f3d4cdd) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'md5_8c1ed58f3d4cdd'
+  willRankTask:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Who tunneled the proxy config
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; grep -hR if /etc/security 2>/dev/null | head -n 2; true ; } > /tmp/data-03/1F5
+            echo "gate artifacts: $(wc -c </tmp/data-03/1F5) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '1F5'
+  loop-route:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Welcome the seating plan right before deploy
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; greeting=theater-horse; echo "[${greeting:1:-1}]"; true ; } > /tmp/data-03/PO-50476-TH
+            echo "gate v1-rc: $(wc -c </tmp/data-03/PO-50476-TH) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'PO-50476-TH'
+  rgChunk:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: Upload the press kit to region b
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; grep -o Threads /proc/self/status | sort | uniq -c; true ; } > /tmp/data-03/27.02.2023
+            echo "gate ensure-production-docker-image: $(wc -c </tmp/data-03/27.02.2023) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '27.02.2023'
+  LC_EL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: reconcileBatchWindowV5
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; cat /etc/passwd|cut -d : -f 3|shuf -n 1; true ; } > /tmp/data-03/20170327_071921
+            echo "gate run-staging-release-candidate: $(wc -c </tmp/data-03/20170327_071921) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '20170327_071921'
+  p6788:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: A754 RETURNS BIN SCAN
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; mkdir -p "${TMPDIR:-/tmp}/setJadeHotel2024_06_26" && rmdir "${TMPDIR:-/tmp}/setJadeHotel2024_06_26" && echo ok; true ; } > /tmp/data-03/a6e3f87aedbd5f7801
+            echo "gate dotnet8-bench: $(wc -c </tmp/data-03/a6e3f87aedbd5f7801) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - 'a6e3f87aedbd5f7801'
+  TEMP_SCOPE_DYNAMIC:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/data-03
+      - run:
+          name: wipe rank 9
+          command: |
+            mkdir -p /tmp/data-03
+            { set +o pipefail 2>/dev/null; printf 'soda\t44\nleads\t82\ndesert\t76\ntheme\t17\n' >'/tmp/Seed.csv' && expand -t 12 '/tmp/Seed.csv'; true ; } > /tmp/data-03/101.167.72.48
+            echo "gate APP-881: $(wc -c </tmp/data-03/101.167.72.48) bytes total"
+      - persist_to_workspace:
+          root: /tmp/data-03
+          paths:
+            - '101.167.72.48'
+workflows:
+  run:
+    jobs:
+      - shrinkLenEnabled
+      - Rollout_Image5:
+          requires:
+            - shrinkLenEnabled
+      - buff3r:
+          requires:
+            - shrinkLenEnabled
+      - VerifyTests:
+          requires:
+            - buff3r
+      - FORM:
+          requires:
+            - buff3r
+      - foxtrot-3:
+          requires:
+            - FORM
+      - k-address:
+          requires:
+            - FORM
+      - orion-beta:
+          requires:
+            - k-address
+      - reloadTimestamp:
+          requires:
+            - k-address
+      - py310-bench:
+          requires:
+            - reloadTimestamp
+      - RootedNoisePlugin:
+          requires:
+            - reloadTimestamp
+      - sanity:
+          requires:
+            - RootedNoisePlugin
+      - zoneNum:
+          requires:
+            - RootedNoisePlugin
+      - spin-up:
+          requires:
+            - zoneNum
+      - unit-bravo:
+          requires:
+            - zoneNum
+      - yuki-test:
+          requires:
+            - unit-bravo
+      - commit_loop
+      - spanSignin
+      - rm-router-v2-reload:
+          requires:
+            - commit_loop
+            - spanSignin
+      - fix-dashboard-hang:
+          requires:
+            - commit_loop
+            - spanSignin
+      - uniform:
+          requires:
+            - commit_loop
+            - spanSignin
+      - depoly:
+          requires:
+            - commit_loop
+            - spanSignin
+      - preview-build:
+          requires:
+            - commit_loop
+            - spanSignin
+      - ns_prnt
+      - defchannel
+      - parser_derive
+      - build-production-integration-tests:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - VerifyImage:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - check-production-test-matrix:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - v3-beta:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - vera-run:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - verify:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - QA_MERGE_3:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - phoenix-beta:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - DeploySuite:
+          requires:
+            - ns_prnt
+            - defchannel
+            - parser_derive
+      - FinnTanaka
+      - sprint_23062002:
+          requires:
+            - FinnTanaka
+      - Build_Release8:
+          requires:
+            - sprint_23062002
+      - arrClean:
+          requires:
+            - sprint_23062002
+      - navy-hex:
+          requires:
+            - arrClean
+      - v4-beta:
+          requires:
+            - navy-hex
+      - ServerLoose:
+          requires:
+            - navy-hex
+      - willRankTask:
+          requires:
+            - ServerLoose
+      - artifacts:
+          requires:
+            - willRankTask
+      - PSIX:
+          requires:
+            - willRankTask
+      - loop-route:
+          requires:
+            - PSIX
+      - v1-rc:
+          requires:
+            - loop-route
+      - hideXMLWindow:
+          requires:
+            - loop-route
+      - rgChunk:
+          requires:
+            - hideXMLWindow
+      - ensure-production-docker-image:
+          requires:
+            - rgChunk
+      - inv_pi:
+          requires:
+            - rgChunk
+      - LC_EL:
+          requires:
+            - inv_pi
+      - run-staging-release-candidate:
+          requires:
+            - LC_EL
+      - BOX_PIXEL:
+          requires:
+            - LC_EL
+      - p6788:
+          requires:
+            - BOX_PIXEL
+      - dotnet8-bench:
+          requires:
+            - p6788
+      - asc_051DF0:
+          requires:
+            - p6788
+      - TEMP_SCOPE_DYNAMIC:
+          requires:
+            - asc_051DF0
+      - APP-881:
+          requires:
+            - TEMP_SCOPE_DYNAMIC
